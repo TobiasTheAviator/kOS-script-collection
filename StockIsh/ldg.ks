@@ -38,7 +38,7 @@ lock g1 to f/mass * cos(vang(up:vector, facing:vector)*0.9). //vertical accelera
 lock vs to -1*verticalspeed. //ships vertical speed
 lock vv to sqrt(2*(alt:radar-h)*(0.9*g1-g0)). //target vertical speed
 
-wait until 0.9 + 0.1*(vs-vv)/(vmax-vmin) > 0.
+wait until 0.9 + 0.1*(vs-vv)/(vmax-vmin) > 0. //wait until its time to throttle up
 set thr to 1.
 lock throttle to thr.
 print "Suizide burn".
