@@ -1,10 +1,10 @@
 clearscreen.
-set gui to gui(200).
+set gui to gui(150).
 set v0l to gui:addlabel("Min Ldg Speed [m/s]").
 set v0f to gui:addtextfield("1").
 set v1l to gui:addlabel("Max Ldg Speed [m/s]").
 set v1f to gui:addtextfield("2").
-set ms to gui:addbutton("Switch Landing Mode").
+set ms to gui:addbutton("Switch Mode").
 set exe to gui:addbutton("EXECUTE").
 set m to 0.
 gui:show().
@@ -16,28 +16,29 @@ else if m=1 set m to 0.
 pm().
 return true.}
 wait until exe:takepress.
-clearguis().
 clearscreen.
 print "Autolanding active".
 pm().
+clearguis().
 SAS off.
+lock steering to lookdirup(srfretrograde:vector,up:topvector).
 set v0 to v0f:text:tonumber().
 set v1 to v1f:text:tonumber().
 set f to maxthrust.
 set h to ship:bounds:size:mag.
 set g0 to body:mu/body:radius^2.
 lock g1 to f/mass*cos(vang(up:vector,srfretrograde:vector)*.9).
-lock vs to -1*verticalspeed.
-when .9*g1>g0 then lock vv to sqrt(2*(alt:radar-h)*(.9*g1-g0)).
-lock steering to lookdirup(srfretrograde,facing:topvector).
 print "Coast".
+wait until .9*g1>g0.
+lock vs to -1*verticalspeed.
+lock vv to sqrt(2*(alt:radar-h)*(.9*g1-g0)).
 wait until .9+.1*(vs-vv)/(v1-v0)>0.
-set t to 0.
+set t to 1.
 lock throttle to t.
 print "Suizide burn".
 until vs<v1 {
 if m=0 {
-if vs > vv set t to 1.
+if vs>vv set t to 1.
 else set t to 0.}
 if m=1 set t to max(min(.9+.1*(vs-vv)/(v1-v0),1),.01).}
 print "Touchdown".
