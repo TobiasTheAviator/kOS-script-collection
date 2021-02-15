@@ -51,7 +51,7 @@ until vs < vmax { //suizide burn control
 }
 
 print "Touchdown".
-until vs <= 0 { //touchdown speed control
+until vs < 0.1 { //touchdown speed control
 	if md = 0 {
 		if vs > vmax set thr to 1.
 		if vs < vmin set thr to 0.

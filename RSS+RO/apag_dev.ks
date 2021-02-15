@@ -48,18 +48,17 @@ print "Active guidance".
 set fref to maxthrust. //reference thrust
 list engines in englist.
 set mf to 0. //mass flow
-for eng in englist set mf to mf + eng:maxmassflow. //mass flow
+for eng in englist if eng:ignition and not eng:flameout set mf to mf+eng:maxmassflow.
 set ce to fref/mf. //effective exhaust velocity
-set mref to mass. //reference mass
 set caot to cos(ptc/2). //first guess
 lock vh to vxcl(up:vector, velocity:orbit):mag. //current horizontal velocity
 lock dvh to vht - vh. //required horizontal delta v to reach target orbit
-guidance(). //first guidance iteration
+guidance(). guidance(). //first guidance iterations
 lock ptc to aot + a0 + a1*mass. //pitch program
 until tb+tref-time:seconds < t1 if time:seconds-tref > 2 guidance(). //update control loop every two seconds
 guidance(). //terminal guidance
 print "Terminal Guidance".
-wait until dvh <= 0.05*fref/mref. //prevent overshooting
+wait until dvh <= 0.05*fref/mass. //prevent overshooting
 lock throttle to 0. //engine cutoff
 print "Guidance finished".
 SAS on.
@@ -77,7 +76,6 @@ function guidance { //guidance algorithm
 	if tb < t0 set a0 to 0. //constant thrust angle
 	set a1 to -a0*dvh/(mf*tb*ce*caot).
 	set tref to time:seconds. //new reference time
-	set mref to mass. //new reference mass
 	print "DeltaV: " + round(dvh/ca) + "m/s  " at(0,7).
 	print "Time  : " + round(tb) + "s  " at(0,8).
 	print "Pitch : " + round(aot+a0+a1*mass,1) + "°  " at(0,9).

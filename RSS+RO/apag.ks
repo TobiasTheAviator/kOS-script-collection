@@ -39,13 +39,13 @@ print "Active guidance".
 set fr to maxthrust.
 list engines in el.
 set mf to 0.
-for eng in el set mf to mf+eng:massflow.
+for eng in el if eng:ignition and not eng:flameout set mf to mf+eng:maxmassflow.
 set ce to fr/mf.
 set mr to mass.
 set ca to cos(p/2).
 lock vh to vxcl(up:vector,velocity:orbit):mag.
 lock dvh to vt-vh.
-gd().
+gd(). gd().
 lock p to aot+a0+a1*mass.
 until tb+tr-time:seconds<t1 if time:seconds-tr>2 gd().
 gd().

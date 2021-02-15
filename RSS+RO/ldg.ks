@@ -42,7 +42,7 @@ if vs>vv set t to 1.
 else set t to 0.}
 if m=1 set t to max(min(.9+.1*(vs-vv)/(v1-v0),1),.01).}
 print "Touchdown".
-until vs<=0 {
+until vs<.1 {
 if m=0 {
 if vs>v1 set t to 1.
 if vs<v0 set t to 0.}
